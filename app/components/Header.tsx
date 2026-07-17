@@ -17,7 +17,7 @@ export default function Header({
   isPaused,
 }: HeaderProps): JSX.Element {
   return (
-    <View>
+    <View style={styles.container}>
       <TouchableOpacity onPress={reloadGame}>
         <Ionicons name="reload-circle" size={35} color={Colors.primary} />
       </TouchableOpacity>
