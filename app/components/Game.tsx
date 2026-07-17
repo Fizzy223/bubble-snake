@@ -6,6 +6,7 @@ import { Colors } from "../styles/colors";
 import { Coordinate, Direction } from "../types/types";
 import { checkFoodEaten } from "../utils/checkFoodEaten";
 import { checkGameOver } from "../utils/checkGameOver";
+import { randomizeFoodPosition } from "../utils/randomizeFoodPosition";
 import Food from "./Food";
 import Snake from "./Snake";
 
@@ -23,7 +24,7 @@ export default function Game() {
   const [food, setFood] = React.useState<Coordinate>(FOOD_INITIAL_POSITION);
   const [isGameOver, setIsGameOver] = React.useState<boolean>(false);
   const [isPaused, setIsPaused] = React.useState<boolean>(false);
-  const [score, setScore] = React.useState<number>(false);
+  const [score, setScore] = React.useState<number>(0);
 
   React.useEffect(() => {
     if (!isGameOver) {
@@ -62,6 +63,7 @@ export default function Game() {
     setSnake([newHead, ...snake].slice(0, -1));
 
     if (checkFoodEaten(newHead, food, 2)) {
+      setFood(randomizeFoodPosition(GAME_BOUNDS.xMax, GAME_BOUNDS.yMax));
       setSnake([newHead, ...snake]);
       setScore(score + SCORE_INCREMENT);
     }
