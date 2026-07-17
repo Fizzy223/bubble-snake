@@ -4,6 +4,9 @@ import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Colors } from "../styles/colors";
 import { Coordinate, Direction } from "../types/types";
+import { checkFoodEaten } from "../utils/checkFoodEaten";
+import { checkGameOver } from "../utils/checkGameOver";
+import Food from "./Food";
 import Snake from "./Snake";
 
 const SNAKE_INITIAL_POSITION = [{ x: 5, y: 5 }];
@@ -20,6 +23,7 @@ export default function Game() {
   const [food, setFood] = React.useState<Coordinate>(FOOD_INITIAL_POSITION);
   const [isGameOver, setIsGameOver] = React.useState<boolean>(false);
   const [isPaused, setIsPaused] = React.useState<boolean>(false);
+  const [score, setScore] = React.useState<number>(false);
 
   React.useEffect(() => {
     if (!isGameOver) {
@@ -33,6 +37,7 @@ export default function Game() {
   const moveSnake = () => {
     const snakeHead = snake[0];
     const newHead = { ...snakeHead };
+
     switch (direction) {
       case Direction.Up:
         newHead.y -= 1;
@@ -50,7 +55,16 @@ export default function Game() {
         break;
     }
 
+    if (checkGameOver(snakeHead, GAME_BOUNDS)) {
+      setIsGameOver((prev) => !prev);
+      return;
+    }
     setSnake([newHead, ...snake].slice(0, -1));
+
+    if (checkFoodEaten(newHead, food, 2)) {
+      setSnake([newHead, ...snake]);
+      setScore(score + SCORE_INCREMENT);
+    }
   };
 
   const handleGesture = Gesture.Pan()
@@ -78,6 +92,7 @@ export default function Game() {
       <SafeAreaView style={styles.container}>
         <View style={styles.boundaries}>
           <Snake snake={snake} />
+          <Food x={food.x} y={food.y} />
         </View>
       </SafeAreaView>
     </GestureDetector>
