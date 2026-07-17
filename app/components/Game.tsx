@@ -8,6 +8,7 @@ import { checkFoodEaten } from "../utils/checkFoodEaten";
 import { checkGameOver } from "../utils/checkGameOver";
 import { randomizeFoodPosition } from "../utils/randomizeFoodPosition";
 import Food from "./Food";
+import Header from "./Header";
 import Snake from "./Snake";
 
 const SNAKE_INITIAL_POSITION = [{ x: 5, y: 5 }];
@@ -92,6 +93,7 @@ export default function Game() {
   return (
     <GestureDetector gesture={handleGesture}>
       <SafeAreaView style={styles.container}>
+        <Header isPaused={isPaused} />
         <View style={styles.boundaries}>
           <Snake snake={snake} />
           <Food x={food.x} y={food.y} />
